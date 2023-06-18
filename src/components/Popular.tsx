@@ -5,6 +5,8 @@ import ListContainer from "./styles/ListContainer";
 import CardDiv from "./styles/CardDiv";
 import CoverImg from "./styles/CoverImg";
 import MovieTitle from "./styles/MovieTitle";
+import { useState } from "react";
+import DetailDiv from "./styles/DetailDiv";
 
 interface IMovie {
   adult: boolean;
@@ -28,6 +30,8 @@ function Popular() {
     ["popularQuery"],
     getPopular
   );
+  const [clicked, setClicked] = useState(false);
+  const onClicked = () => setClicked((prev) => !prev);
   const popularDataResults = popularData?.results;
   console.log(popularDataResults);
   return (
@@ -36,7 +40,7 @@ function Popular() {
       {!popularIsLoading ? (
         <ListContainer>
           {popularDataResults?.map((data: IMovie) => (
-            <CardDiv key={data.id}>
+            <CardDiv onClick={onClicked} key={data.id}>
               <CoverImg src={makeImagePath(data.poster_path)} />
               <MovieTitle>{data.title}</MovieTitle>
             </CardDiv>
@@ -45,6 +49,7 @@ function Popular() {
       ) : (
         "is Loading..."
       )}
+      {clicked ? <DetailDiv /> : null}
     </MainContainer>
   );
 }
